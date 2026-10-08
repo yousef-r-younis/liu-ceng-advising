@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>CENG Advising</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow column, one question per screen, Back link on top. Matches the CENG Study Planner. Light only. */
+:root{
+  color-scheme:light;
+  --bg:#f2f3f3; --card:#ffffff; --ink:#1c2529; --muted:#6b767b; --line:#e4e7e8; --soft:#f6f7f7;
+  --green:#2e7558; --green-soft:#e7f3ed; --red:#a8402f; --red-soft:#fbeae6; --blue:#2c5d97; --blue-soft:#eaf0f8; --warn:#8a5a00; --warn-soft:#fbf0db;
+  --f:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --m:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f)}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:grid;gap:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.top small{display:block;font-size:13px;color:var(--muted)}
+h1{font:700 22px/1.2 var(--f);margin:0}
+.reg{font-size:14px;color:var(--muted);text-align:right}
+.reg b{display:block;color:var(--ink);font-weight:600}
+.sample{font-size:13px;background:var(--warn-soft);color:var(--warn);padding:8px 12px;border-radius:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px;display:grid;gap:14px;min-width:0}
+.back{justify-self:start;font:500 14px var(--f);color:var(--blue);background:none;border:0;padding:0;cursor:pointer}
+.stepno{font-size:13px;color:var(--muted)}
+h2{font:600 19px/1.3 var(--f);margin:0;text-wrap:balance}
+.lead{margin:0;color:var(--muted);font-size:14px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.choices{display:grid;gap:8px}
+.choice{display:grid;gap:2px;text-align:left;font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.choice:hover{background:var(--soft)}
+.choice b{font-weight:600}
+.choice span{font-size:13px;color:var(--muted)}
+.pills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pill{font:500 13px var(--m);padding:10px 4px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);cursor:pointer;text-align:center;min-width:0}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.pill.green[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
+.ghead{font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
+.primary{font:600 15px var(--f);padding:13px;border:0;border-radius:12px;background:var(--ink);color:#fff;cursor:pointer}
+.primary:disabled{opacity:.35;cursor:default}
+.secondary{font:500 14px var(--f);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.count{font-size:13px;color:var(--muted)}
+.sec{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:var(--card);text-align:left;font:inherit;color:var(--ink)}
+.sec .s{font:500 13px var(--m)}
+.sec .t{font-size:14px}
+.sec .i{font-size:13px;color:var(--muted)}
+.sec .flag{font-size:12px;padding:2px 8px;border-radius:6px;background:var(--soft);color:var(--muted)}
+.sec[aria-pressed="true"]{background:var(--red-soft);border-color:transparent}
+.sec[aria-pressed="true"] .flag{background:var(--red);color:#fff}
+.verdict{display:grid;gap:4px;padding:14px 16px;border-radius:12px}
+.verdict small{font-size:13px;font-weight:600}
+.verdict b{font:700 22px/1.2 var(--f)}
+.verdict.no{background:var(--red-soft)} .verdict.no small{color:var(--red)}
+.verdict.yes{background:var(--green-soft)} .verdict.yes small{color:var(--green)}
+.verdict.maybe{background:var(--blue-soft)} .verdict.maybe small{color:var(--blue)}
+.reason{margin:0;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:6px 4px;border-bottom:1px solid var(--ink)}
+td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td.code{font:500 13px var(--m)}
+.tablewrap{overflow-x:auto}
+.fields{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media (max-width:420px){.fields{grid-template-columns:1fr}}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-size:13px;color:var(--muted)}
+input[type=text],textarea{font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box}
+textarea{min-height:90px;resize:vertical}
+.row2{display:flex;gap:8px;flex-wrap:wrap}
+.row2 > *{flex:1 1 auto}
+.toast{font-size:13px;color:var(--green);min-height:1.2em}
+.note{font-size:13px;color:var(--muted);margin:0}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+</style>
+</head><body>
+
+
+<div class="wrap">
+  <div class="top">
+    <div><small>LIU · CCE Department</small><h1>CENG Advising</h1></div>
+    <div class="reg">Registration<b id="regTerm"></b></div>
+  </div>
+  <div class="sample" id="sampleNote" hidden>Section times on this page are sample data for testing.</div>
+  <section class="card" id="screen" aria-live="polite"></section>
+</div>
+
+<script>
+const DATA = {"program":{"code":"CENG","name":"Bachelor of Science in Computer Engineering","university":"Lebanese International University","totalCredits":108,"posDate":"2024-09-04","creditLimits":{"fall":18,"spring":18,"summer":8},"notes":["prereqs: must be completed BEFORE the course (all required).","coreqs: must be completed before OR taken in the same semester.","externalPrereqs: remedial courses outside the 108 credits; assumed completed.","offered: semesters the course opens in.","pairedWith: must be registered in the same semester (unless the partner is already completed)."]},"externalCourses":["MATH160","MATH161","PHYS160","PHYS161","CHEM160","ENGL051","ENGL101","ENGL151"],"courses":[{"code":"CULT200","name":"Introduction to Arab-Islamic Civilization","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"MATH225","name":"Linear Algebra with Applications","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":["MATH160","ENGL051","MATH161"],"offered":["fall","spring","summer"]},{"code":"ENGL201","name":"Composition and Research Skills","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":["ENGL151"],"offered":["fall","spring","summer"]},{"code":"ENGG200","name":"Introduction to Engineering","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":["MATH160","CHEM160"],"offered":["fall","spring","summer"]},{"code":"PHYS220","name":"Physics for Engineers","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":["MATH210"],"externalPrereqs":["PHYS161","ENGL101","PHYS160"],"offered":["fall","spring","summer"]},{"code":"MATH210","name":"Calculus II","credits":3,"year":1,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":["MATH161","MATH160"],"offered":["fall","spring","summer"]},{"code":"CSCI250L","name":"Introduction to Programming Lab","credits":1,"year":1,"term":"spring","prereqs":[],"coreqs":["CSCI250"],"externalPrereqs":["ENGL101"],"offered":["fall","spring","summer"],"pairedWith":"CSCI250"},{"code":"MATH270","name":"Ordinary Differential Equations","credits":3,"year":1,"term":"spring","prereqs":["MATH210"],"coreqs":["MATH225"],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"CSCI250","name":"Introduction to Programming","credits":3,"year":1,"term":"spring","prereqs":[],"coreqs":["CSCI250L"],"externalPrereqs":["ENGL101"],"offered":["fall","spring","summer"],"pairedWith":"CSCI250L"},{"code":"EENG250","name":"Electric Circuits I","credits":3,"year":1,"term":"spring","prereqs":[],"coreqs":["ENGG200","MATH210"],"externalPrereqs":["PHYS161","PHYS160","MATH161","MATH160","ENGL051"],"offered":["fall","spring","summer"]},{"code":"CENG250","name":"Digital Logic I","credits":3,"year":1,"term":"spring","prereqs":[],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"MATH220","name":"Calculus III","credits":3,"year":1,"term":"spring","prereqs":["MATH210"],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"ARAB200","name":"Arabic Language and Literature","credits":3,"year":1,"term":"summer","prereqs":[],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"ENGL251","name":"Communication Skills","credits":3,"year":1,"term":"summer","prereqs":["ENGL201"],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"CSCI300","name":"Intermediate Programming with Objects","credits":3,"year":2,"term":"fall","prereqs":["CSCI250L","CSCI250"],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"],"pairedWith":"CENG325"},{"code":"EENG300","name":"Electric Circuits II","credits":3,"year":2,"term":"fall","prereqs":["EENG250"],"coreqs":["EENG301L"],"externalPrereqs":[],"offered":["fall","spring"],"pairedWith":"EENG301L"},{"code":"MATH310","name":"Probability & Statistics for Scientists & Engineers","credits":3,"year":2,"term":"fall","prereqs":["MATH210","ENGL201"],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"CENG335","name":"Digital Logic II","credits":3,"year":2,"term":"fall","prereqs":["CSCI250","CENG250"],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring"]},{"code":"CENG325","name":"Software Applications and Design","credits":3,"year":2,"term":"fall","prereqs":[],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring"],"pairedWith":"CSCI300"},{"code":"EENG301L","name":"Electric Circuits Lab","credits":1,"year":2,"term":"fall","prereqs":["EENG250"],"coreqs":["EENG300"],"externalPrereqs":[],"offered":["fall","spring"],"pairedWith":"EENG300"},{"code":"EENG350L","name":"Electronic Circuits I Lab","credits":1,"year":2,"term":"spring","prereqs":["EENG300","EENG250","EENG301L"],"coreqs":["EENG350"],"externalPrereqs":[],"offered":["spring","summer"],"pairedWith":"EENG350"},{"code":"ENGG300","name":"Engineering Economics","credits":3,"year":2,"term":"spring","prereqs":["ENGL201","MATH225"],"coreqs":["MATH220"],"externalPrereqs":[],"offered":["fall","spring","summer"]},{"code":"CENG352L","name":"Digital Logic Circuits Lab","credits":1,"year":2,"term":"spring","prereqs":["CENG250","EENG301L"],"coreqs":[],"externalPrereqs":[],"offered":["spring","summer"],"pairedWith":"CENG380"},{"code":"EENG385","name":"Signals and Systems","credits":3,"year":2,"term":"spring","prereqs":["MATH225","EENG300"],"coreqs":["MATH310","MATH270"],"externalPrereqs":[],"offered":["spring","summer"]},{"code":"CENG375","name":"Introduction to Database Systems","credits":3,"year":2,"term":"spring","prereqs":["CENG325","CSCI300"],"coreqs":[],"externalPrereqs":[],"offered":["spring","summer"]},{"code":"CENG380","name":"Microprocessors and Microcontrollers","credits":3,"year":2,"term":"spring","prereqs":["CENG250","CENG335","EENG250","CSCI250"],"coreqs":["CENG352L"],"externalPrereqs":[],"offered":["spring","summer"],"pairedWith":"CENG352L"},{"code":"EENG350","name":"Electronic Circuits I","credits":3,"year":2,"term":"spring","prereqs":["ENGG200","CENG250","EENG300","EENG250"],"coreqs":["EENG350L"],"externalPrereqs":[],"offered":["spring","summer"],"pairedWith":"EENG350L"},{"code":"CENG430L","name":"Linux Lab","credits":1,"year":3,"term":"fall","prereqs":["CENG380","CENG325"],"coreqs":[],"externalPrereqs":[],"offered":["fall"]},{"code":"EENG447","name":"Analog Communication Systems","credits":3,"year":3,"term":"fall","prereqs":["MATH310","EENG385"],"coreqs":[],"externalPrereqs":[],"offered":["fall"]},{"code":"CENG415","name":"Communication Networks","credits":3,"year":3,"term":"fall","prereqs":["CENG250","CENG325","CSCI250","CSCI300"],"coreqs":[],"externalPrereqs":[],"offered":["fall"]},{"code":"CENG420","name":"Web Programming and Technologies","credits":3,"year":3,"term":"fall","prereqs":["CENG325","CSCI300","CENG375"],"coreqs":[],"externalPrereqs":[],"offered":["fall"]},{"code":"CENG400L","name":"Microcontroller Applications Lab","credits":1,"year":3,"term":"fall","prereqs":["CENG380"],"coreqs":[],"externalPrereqs":[],"offered":["fall"],"pairedWith":"CENG400"},{"code":"CENG400","name":"Computer Organization and Design","credits":3,"year":3,"term":"fall","prereqs":["CENG335","CENG250","CENG380"],"coreqs":[],"externalPrereqs":[],"offered":["fall"],"pairedWith":"CENG400L"},{"code":"CENG435","name":"Mobile Application Development","credits":3,"year":3,"term":"fall","prereqs":["CENG325","CSCI300","CENG375"],"coreqs":[],"externalPrereqs":[],"offered":["fall"]},{"code":"CENG450L","name":"Scripting Languages Lab","credits":1,"year":3,"term":"spring","prereqs":["CENG430L"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]},{"code":"CENG455L","name":"Communication Networks Lab","credits":1,"year":3,"term":"spring","prereqs":["CENG415"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]},{"code":"CENG495","name":"Senior Project","credits":3,"year":3,"term":"spring","prereqs":["CENG420","EENG350","EENG447","CENG435","CENG415","CENG380","CENG375"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]},{"code":"EENG467L","name":"Analog Communication Systems Lab","credits":1,"year":3,"term":"spring","prereqs":["EENG447"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]},{"code":"ENGG450","name":"Engineering Ethics and Professional Practice","credits":3,"year":3,"term":"spring","prereqs":["ENGL251"],"coreqs":["CENG495","ENGG300"],"externalPrereqs":[],"offered":["spring","summer"]},{"code":"GENELEC","name":"General Elective","credits":3,"year":3,"term":"spring","prereqs":[],"coreqs":[],"externalPrereqs":[],"offered":["fall","spring","summer"],"isElective":true},{"code":"CENG460","name":"Operating Systems (Major Elective)","credits":3,"year":3,"term":"spring","prereqs":["CENG380","CSCI300"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]},{"code":"CENG470","name":"Data Structures and Analysis of Algorithms (Major Elective)","credits":3,"year":3,"term":"spring","prereqs":["CENG325","CSCI300"],"coreqs":[],"externalPrereqs":[],"offered":["spring"]}]};
+const SECTIONS = {"term":"spring","year":2027,"sample":true,"note":"SAMPLE section list for testing. Replace with the real export from the registrar each semester.","sections":[{"course":"CSCI250","section":"A","days":"MW","start":"08:00","end":"09:15","instructor":"Instructor 1"},{"course":"CSCI250L","section":"A","days":"T","start":"14:00","end":"16:00","instructor":"Instructor 2"},{"course":"CSCI250L","section":"B","days":"R","start":"11:00","end":"13:00","instructor":"Instructor 2"},{"course":"EENG250","section":"A","days":"MW","start":"09:30","end":"10:45","instructor":"Instructor 3"},{"course":"CENG250","section":"A","days":"TR","start":"09:30","end":"10:45","instructor":"Instructor 4"},{"course":"MATH270","section":"A","days":"MW","start":"09:30","end":"10:45","instructor":"Instructor 5"},{"course":"MATH270","section":"B","days":"TR","start":"09:30","end":"10:45","instructor":"Instructor 5"},{"course":"MATH220","section":"A","days":"TR","start":"08:00","end":"09:15","instructor":"Instructor 6"},{"course":"MATH310","section":"A","days":"MW","start":"14:00","end":"15:15","instructor":"Instructor 6"},{"course":"ENGL251","section":"A","days":"MW","start":"12:30","end":"13:45","instructor":"Instructor 7"},{"course":"ENGL251","section":"B","days":"F","start":"08:00","end":"10:30","instructor":"Instructor 7"},{"course":"ARAB200","section":"A","days":"MW","start":"12:30","end":"13:45","instructor":"Instructor 8"},{"course":"ARAB200","section":"B","days":"TR","start":"12:30","end":"13:45","instructor":"Instructor 8"},{"course":"CSCI300","section":"A","days":"TR","start":"11:00","end":"12:15","instructor":"Instructor 9"},{"course":"CENG325","section":"A","days":"MW","start":"14:00","end":"15:15","instructor":"Instructor 10"},{"course":"CENG335","section":"A","days":"TR","start":"14:00","end":"15:15","instructor":"Instructor 4"},{"course":"EENG300","section":"A","days":"MW","start":"11:00","end":"12:15","instructor":"Instructor 3"},{"course":"EENG301L","section":"A","days":"R","start":"14:00","end":"16:00","instructor":"Instructor 11"},{"course":"ENGG300","section":"A","days":"TR","start":"09:30","end":"10:45","instructor":"Instructor 12"},{"course":"CENG380","section":"A","days":"MW","start":"08:00","end":"09:15","instructor":"Instructor 13"},{"course":"CENG380","section":"B","days":"TR","start":"11:00","end":"12:15","instructor":"Instructor 13"},{"course":"CENG352L","section":"A","days":"M","start":"14:00","end":"16:00","instructor":"Instructor 11"},{"course":"CENG352L","section":"B","days":"R","start":"14:00","end":"16:00","instructor":"Instructor 11"},{"course":"EENG385","section":"A","days":"MW","start":"08:00","end":"09:15","instructor":"Instructor 14"},{"course":"EENG385","section":"B","days":"TR","start":"11:00","end":"12:15","instructor":"Instructor 14"},{"course":"CENG375","section":"A","days":"MW","start":"09:30","end":"10:45","instructor":"Instructor 10"},{"course":"CENG375","section":"B","days":"TR","start":"14:00","end":"15:15","instructor":"Instructor 10"},{"course":"EENG350","section":"A","days":"TR","start":"08:00","end":"09:15","instructor":"Instructor 15"},{"course":"EENG350","section":"B","days":"MW","start":"11:00","end":"12:15","instructor":"Instructor 15"},{"course":"EENG350L","section":"A","days":"W","start":"14:00","end":"16:00","instructor":"Instructor 11"},{"course":"EENG350L","section":"B","days":"T","start":"16:00","end":"18:00","instructor":"Instructor 11"},{"course":"CENG450L","section":"A","days":"T","start":"09:30","end":"11:30","instructor":"Instructor 16"},{"course":"CENG455L","section":"A","days":"W","start":"16:00","end":"18:00","instructor":"Instructor 16"},{"course":"CENG455L","section":"B","days":"F","start":"09:00","end":"11:00","instructor":"Instructor 16"},{"course":"CENG460","section":"A","days":"MW","start":"11:00","end":"12:15","instructor":"Instructor 17"},{"course":"CENG470","section":"A","days":"MW","start":"11:00","end":"12:15","instructor":"Instructor 9"},{"course":"CENG495","section":"A","days":"R","start":"16:00","end":"18:00","instructor":"Instructor 13"},{"course":"EENG467L","section":"A","days":"R","start":"09:30","end":"11:30","instructor":"Instructor 15"},{"course":"ENGG450","section":"A","days":"TR","start":"12:30","end":"13:45","instructor":"Instructor 12"},{"course":"ENGG450","section":"B","days":"MW","start":"16:00","end":"17:15","instructor":"Instructor 12"},{"course":"GENELEC","section":"A","days":"F","start":"11:00","end":"13:30","instructor":"Instructor 18"}]};
+// Planner logic: pure functions, no DOM.
+function buildIndex(courses) {
+  const byCode = {};
+  courses.forEach(c => { byCode[c.code] = c; });
+  // dependents: courses that need c (as prereq => +1 lag, as coreq => 0 lag)
+  const deps = {};
+  courses.forEach(c => { deps[c.code] = []; });
+  courses.forEach(c => {
+    c.prereqs.forEach(p => deps[p] && deps[p].push({ code: c.code, lag: 1 }));
+    c.coreqs.forEach(p => deps[p] && deps[p].push({ code: c.code, lag: 0 }));
+  });
+  // height = number of further semesters this course unlocks
+  const height = {};
+  const h = code => {
+    if (height[code] !== undefined) return height[code];
+    height[code] = 0;
+    let best = 0;
+    deps[code].forEach(d => { best = Math.max(best, h(d.code) + d.lag); });
+    height[code] = best;
+    return best;
+  };
+  courses.forEach(c => h(c.code));
+  const unlocks = {};
+  const count = (code, seen) => {
+    deps[code].forEach(d => { if (!seen.has(d.code)) { seen.add(d.code); count(d.code, seen); } });
+    return seen;
+  };
+  courses.forEach(c => { unlocks[c.code] = count(c.code, new Set()).size; });
+  return { byCode, height, unlocks };
+}
+
+// LIU academic year: Fall (Oct) -> Spring (Feb) -> Summer (Jun/Jul), all named by the year they end in.
+// "year" is that ending year: Fall 2027 starts Oct 2026.
+const TERM_ORDER = ['fall', 'spring', 'summer'];
+function nextTerm(t) {
+  const i = TERM_ORDER.indexOf(t.term);
+  return i === 2 ? { term: 'fall', year: t.year + 1 } : { term: TERM_ORDER[i + 1], year: t.year };
+}
+
+// Group = course + its pair partner + any coreqs not yet done (recursively)
+function groupFor(code, idx, done) {
+  const g = new Set();
+  const add = c => {
+    if (g.has(c) || done.has(c)) return;
+    g.add(c);
+    const course = idx.byCode[c];
+    if (course.pairedWith) add(course.pairedWith);
+    course.coreqs.forEach(add);
+  };
+  add(code);
+  return [...g];
+}
+
+function planOnce(data, completed, opts) {
+  const courses = data.courses;
+  const idx = buildIndex(courses);
+  const done = new Set(completed);
+  const limits = Object.assign({}, data.program.creditLimits, opts.limits || {});
+  const plan = [];
+  let t = { term: opts.startTerm, year: opts.startYear };
+  let guard = 0;
+  const remaining = () => courses.filter(c => !done.has(c.code));
+  while (remaining().length && guard++ < 30) {
+    const isSummer = t.term === 'summer';
+    if (isSummer && !opts.useSummer) { t = nextTerm(t); continue; }
+    const cap = limits[t.term];
+    const before = new Set(done); // state at start of term
+    const taken = [];
+    let credits = 0;
+    const eligible = code => {
+      const c = idx.byCode[code];
+      if (plan.length === 0 && opts.blockFirst && opts.blockFirst.includes(code)) return false;
+      return c.offered.includes(t.term) && c.prereqs.every(p => before.has(p));
+    };
+    const candidates = remaining().map(c => c.code).filter(eligible);
+    // follow the official plan order first; courses that unlock long chains or open once a year get a boost
+    const W = opts.weights || { slot: 10, height: 50, rare: 40 };
+    const slot = x => { const c = idx.byCode[x]; return (c.year - 1) * 3 + { fall: 0, spring: 1, summer: 2 }[c.term]; };
+    const score = x => -slot(x) * W.slot + idx.height[x] * W.height + idx.unlocks[x]
+      + (idx.byCode[x].offered.length === 1 ? W.rare : 0);
+    const groupScore = code => Math.max(...groupFor(code, idx, before).map(score));
+    candidates.sort((a, b) => groupScore(b) - groupScore(a));
+    // two passes: second pass lets a course join once its co-requisite is in this term
+    for (let pass = 0; pass < 2; pass++) {
+      candidates.forEach(code => {
+        if (taken.includes(code)) return;
+        const inTerm = new Set([...before, ...taken]);
+        const g = groupFor(code, idx, inTerm);
+        if (!g.every(eligible)) return;
+        const cr = g.reduce((s, x) => s + idx.byCode[x].credits, 0);
+        if (credits + cr <= cap) { taken.push(...g); credits += cr; }
+      });
+    }
+    taken.forEach(x => done.add(x));
+    plan.push({ term: t.term, year: t.year, courses: taken.map(x => idx.byCode[x]), credits });
+    t = nextTerm(t);
+  }
+  // trim trailing empty terms
+  while (plan.length && !plan[plan.length - 1].courses.length) plan.pop();
+  return { plan, unplaced: remaining().map(c => c.code) };
+}
+
+// Try a plan that follows the official order closely, then faster variants; keep the earliest graduation.
+const WEIGHT_SETS = [
+  { slot: 100, height: 10, rare: 15 },
+  { slot: 30, height: 25, rare: 20 },
+  { slot: 10, height: 50, rare: 40 },
+  { slot: 1, height: 25, rare: 15 }
+];
+function planCourses(data, completed, opts) {
+  const key = r => {
+    if (r.unplaced.length) return 1e9;
+    const last = r.plan[r.plan.length - 1];
+    if (!last) return 0;
+    const regular = r.plan.filter(s => s.term !== 'summer').length;
+    return (last.year * 3 + { fall: 0, spring: 1, summer: 2 }[last.term]) * 100 + regular * 10 + r.plan.length;
+  };
+  let best = null;
+  WEIGHT_SETS.forEach(w => {
+    const r = planOnce(data, completed, Object.assign({}, opts, { weights: w }));
+    if (!best || key(r) < key(best)) best = r;
+  });
+  return best;
+}
+
+// Which semester is running on a date, and which one students register for next
+function currentTerm(date) {
+  const m = date.getMonth() + 1, y = date.getFullYear();
+  if (m >= 10) return { term: 'fall', year: y + 1 };
+  if (m === 1) return { term: 'fall', year: y };
+  if (m <= 6) return { term: 'spring', year: y };
+  return { term: 'summer', year: y };
+}
+
+
+// Advising logic: pure functions, no DOM. Depends on planner-logic.js (planCourses, nextTerm).
+const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+function overlaps(a, b) {
+  if (![...a.days].some(d => b.days.includes(d))) return false;
+  return toMin(a.start) < toMin(b.end) && toMin(b.start) < toMin(a.end);
+}
+
+// Find a clash-free set of sections, one per course. `full` = Set of "COURSE-SEC" to skip.
+function solveSchedule(sections, courses, full) {
+  const opts = courses.map(c => sections.filter(s => s.course === c && !full.has(s.course + '-' + s.section)));
+  const missing = courses.filter((c, i) => !opts[i].length);
+  if (missing.length) return { ok: false, missing };
+  const order = courses.map((c, i) => i).sort((a, b) => opts[a].length - opts[b].length);
+  const pick = [];
+  const go = k => {
+    if (k === order.length) return true;
+    for (const s of opts[order[k]]) {
+      if (pick.every(p => !overlaps(p, s))) { pick.push(s); if (go(k + 1)) return true; pick.pop(); }
+    }
+    return false;
+  };
+  if (go(0)) return { ok: true, schedule: courses.map(c => pick.find(p => p.course === c)) };
+  // explain: smallest group of courses whose open sections can never fit together
+  for (let i = 0; i < courses.length; i++) for (let j = i + 1; j < courses.length; j++) {
+    if (opts[i].every(a => opts[j].every(b => overlaps(a, b)))) return { ok: false, clash: [courses[i], courses[j]], options: [opts[i], opts[j]] };
+  }
+  return { ok: false, clash: courses };
+}
+
+// Does delaying `code` past the registration term push graduation back?
+function delayImpact(data, passed, code, startTerm, startYear, useSummer) {
+  const c = data.courses.find(x => x.code === code);
+  const done = new Set(passed);
+  if (done.has(code)) return { status: 'passed' };
+  if (!c.offered.includes(startTerm)) return { status: 'not-offered' };
+  const missingPre = c.prereqs.filter(p => !done.has(p));
+  if (missingPre.length) return { status: 'missing-prereqs', missingPre };
+  const base = { startTerm, startYear, useSummer };
+  const a = planCourses(data, passed, base);
+  const b = planCourses(data, passed, Object.assign({}, base, { blockFirst: [code] }));
+  const key = r => { const l = r.plan[r.plan.length - 1]; return l ? l.year * 3 + ['fall', 'spring', 'summer'].indexOf(l.term) : 0; };
+  const remaining = data.courses.filter(x => !done.has(x.code)).length;
+  const graduating = a.plan.length === 1 || remaining === (a.plan[0] ? a.plan[0].courses.length : 0);
+  return { status: 'ok', graduating, delays: key(b) > key(a), withIt: a.plan[a.plan.length - 1], without: b.plan[b.plan.length - 1] };
+}
+
+
+const LABEL = {fall:'Fall',spring:'Spring',summer:'Summer'};
+const DAYS = {M:'Mon',T:'Tue',W:'Wed',R:'Thu',F:'Fri',S:'Sat'};
+const termName = t => `${LABEL[t.term]} ${t.year - 1}–${t.year}`;
+const REG = { term: SECTIONS.term, year: SECTIONS.year };
+const byCode = Object.fromEntries(DATA.courses.map(c => [c.code, c]));
+const offeredCodes = DATA.courses.map(c => c.code).filter(c => SECTIONS.sections.some(s => s.course === c));
+const when = s => `${[...s.days].map(d => DAYS[d]).join(' ')} ${s.start}–${s.end}`;
+const store = {
+  get(){ try { return JSON.parse(localStorage.getItem('ceng-advising') || 'null'); } catch(e){ return null; } },
+  set(v){ try { localStorage.setItem('ceng-advising', JSON.stringify(v)); } catch(e){} }
+};
+const saved = store.get() || {};
+const S = { history: [], picked: new Set(), full: new Set(), course: null, passed: new Set(saved.passed || []), note: '', result: null,
+  name: saved.name || '', id: saved.id || '' };
+const el = document.getElementById('screen');
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function go(name){ S.history.push(name); render(); window.scrollTo({top:0}); }
+function back(){ S.history.pop(); render(); }
+const head = (no, title, lead) => `${S.history.length > 1 ? '<button class="back" type="button" data-act="back">← Back</button>' : ''}
+  ${no ? `<div class="stepno">${no}</div>` : ''}<h2>${title}</h2>${lead ? `<p class="lead">${lead}</p>` : ''}`;
+
+const screens = {
+  start(){
+    return head('', 'Why are you visiting?', 'Pick the reason that fits best. This decides whether a forced registration or section change is possible.') + `
+    <div class="choices">
+      <button class="choice" type="button" data-go="conflict"><b>My courses have a time conflict</b><span>Two courses I need overlap in every section</span></button>
+      <button class="choice" type="button" data-go="fullCourse"><b>A course I need is full</b><span>All sections are closed and I need it to graduate or stay on track</span></button>
+      <button class="choice" type="button" data-reason="work"><b>I work at that time</b><span>I need a different section because of my job</span></button>
+      <button class="choice" type="button" data-reason="pref"><b>I prefer another time or instructor</b><span>The section I got doesn't suit me</span></button>
+      <button class="choice" type="button" data-go="other"><b>Something else</b><span>Describe your case for the advisor</span></button>
+    </div>`;
+  },
+  conflict(){
+    return head('Time conflict · step 1 of 2', 'Which courses do you need this semester?', 'Tap every course you want to register, labs included. The system checks all section combinations.') + `
+    <div class="pills">${offeredCodes.map(c => `<button type="button" class="pill" data-pick="${c}" aria-pressed="${S.picked.has(c)}" title="${esc(byCode[c].name)}">${c}</button>`).join('')}</div>
+    <div class="count">${S.picked.size} selected</div>
+    <button class="primary" type="button" data-act="solve" ${S.picked.size < 2 ? 'disabled' : ''}>Check my schedule</button>`;
+  },
+  solved(){
+    const courses = [...S.picked];
+    const r = solveSchedule(SECTIONS.sections, courses, S.full);
+    if (r.ok){
+      return head('Time conflict · step 2 of 2', 'These sections fit together', 'Tap any section that is already full and the system will look for another combination.') + `
+      <div class="choices">${r.schedule.map(s => `<button type="button" class="sec" data-full="${s.course}-${s.section}" aria-pressed="false">
+        <span class="s">${s.section}</span><span><span class="s">${s.course}</span> <span class="t">${when(s)}</span><br><span class="i">${esc(s.instructor)}</span></span><span class="flag">Full?</span></button>`).join('')}</div>
+      ${S.full.size ? `<p class="note">Marked full so far: ${[...S.full].join(', ')}</p>` : ''}
+      <div class="row2"><button class="secondary" type="button" data-act="recheck">Recheck without full sections</button>
+      <button class="primary" type="button" data-act="accept">Done, these work</button></div>`;
+    }
+    let reason;
+    if (r.missing) reason = `Every section of ${r.missing.join(', ')} is full.`;
+    else if (r.clash.length === 2) reason = `${r.clash[0]} and ${r.clash[1]} overlap in every open section: ${r.options[0].map(s => `${s.course}-${s.section} ${when(s)}`).join(', ')} vs ${r.options[1].map(s => `${s.course}-${s.section} ${when(s)}`).join(', ')}.`;
+    else reason = `No combination of open sections fits ${r.clash.join(', ')} without an overlap.`;
+    S.result = { decision: 'yes', title: 'Eligible for review', reason: 'Unsolvable time conflict. ' + reason, kind: 'Time conflict', courses };
+    return screens.result();
+  },
+  fullCourse(){
+    return head('Full course · step 1 of 3', 'Which course is full?') + `
+    <div class="pills">${offeredCodes.map(c => `<button type="button" class="pill" data-one="${c}" aria-pressed="${S.course === c}" title="${esc(byCode[c].name)}">${c}</button>`).join('')}</div>
+    <button class="primary" type="button" data-act="toSections" ${S.course ? '' : 'disabled'}>Next</button>`;
+  },
+  fullSections(){
+    const secs = SECTIONS.sections.filter(s => s.course === S.course);
+    return head('Full course · step 2 of 3', `Which ${S.course} sections are full?`, 'Check each one in UMS, then tap the full ones.') + `
+    <div class="choices">${secs.map(s => `<button type="button" class="sec" data-full="${s.course}-${s.section}" aria-pressed="${S.full.has(s.course + '-' + s.section)}">
+      <span class="s">${s.section}</span><span><span class="t">${when(s)}</span><br><span class="i">${esc(s.instructor)}</span></span><span class="flag">Full</span></button>`).join('')}</div>
+    <button class="primary" type="button" data-act="checkFull">Next</button>`;
+  },
+  fullPassed(){
+    const groups = [];
+    DATA.courses.forEach(c => { let g = groups.find(x => x.year === c.year && x.term === c.term); if (!g) groups.push(g = {year:c.year, term:c.term, list:[]}); g.list.push(c); });
+    return head('Full course · step 3 of 3', 'Which courses have you passed?', 'This shows whether waiting a semester for ' + S.course + ' delays your graduation.') +
+      groups.map(g => `<div class="ghead">Year ${g.year} · ${LABEL[g.term]}</div><div class="pills">${g.list.map(c => `<button type="button" class="pill green" data-passed="${c.code}" aria-pressed="${S.passed.has(c.code)}" title="${esc(c.name)}">${c.code}</button>`).join('')}</div>`).join('') + `
+      <button class="primary" type="button" data-act="impact">See result</button>`;
+  },
+  other(){
+    return head('Other', 'Describe your case', 'Keep it short. The advisor will read this with you.') + `
+    <div class="field"><label for="noteBox">Your case</label><textarea id="noteBox">${esc(S.note)}</textarea></div>
+    <button class="primary" type="button" data-act="otherDone">Continue</button>`;
+  },
+  result(){
+    const r = S.result;
+    const cls = r.decision === 'yes' ? 'yes' : r.decision === 'no' ? 'no' : 'maybe';
+    return `${S.history.length > 1 ? '<button class="back" type="button" data-act="back">← Back</button>' : ''}
+    <div class="verdict ${cls}"><small>${esc(r.kind)}</small><b>${esc(r.title)}</b></div>
+    <p class="reason">${esc(r.reason)}</p>
+    ${r.schedule ? `<div class="tablewrap"><table><tr><th>Course</th><th>Sec</th><th>Time</th></tr>${r.schedule.map(s => `<tr><td class="code">${s.course}</td><td>${s.section}</td><td>${when(s)}</td></tr>`).join('')}</table></div>` : ''}
+    ${r.decision !== 'no' ? `<hr>
+    <div class="fields">
+      <div class="field"><label for="stName">Full name</label><input type="text" id="stName" value="${esc(S.name)}" autocomplete="name"></div>
+      <div class="field"><label for="stId">Student ID</label><input type="text" id="stId" value="${esc(S.id)}" inputmode="numeric"></div>
+    </div>
+    <button class="primary" type="button" data-act="copy">Copy summary for the advisor</button>
+    <p class="note">Show this screen to the advisor, or paste the summary in your message. The final decision is the advisor's.</p>
+    <div class="toast" id="toast"></div>` : `<p class="note">If you think this is wrong, you can still talk to the advisor, but forced registration is not possible for this reason.</p>`}
+    <button class="secondary" type="button" data-act="restart">Start over</button>`;
+  }
+};
+
+function summaryText(){
+  const r = S.result;
+  return [`CENG Advising — ${termName(REG)}`, `Student: ${S.name || '-'} (${S.id || '-'})`, `Reason: ${r.kind}`,
+    `Result: ${r.title}`, r.reason, r.courses ? `Courses: ${r.courses.join(', ')}` : '', r.note ? `Note: ${r.note}` : ''].filter(Boolean).join('\n');
+}
+
+function render(){
+  const name = S.history[S.history.length - 1];
+  el.innerHTML = screens[name]();
+}
+
+function setResult(r){ S.result = r; go('result'); }
+
+el.addEventListener('click', async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const d = b.dataset;
+  if (d.act === 'back') return back();
+  if (d.go){ S.picked.clear(); S.full.clear(); S.course = null; return go(d.go); }
+  if (d.reason === 'work') return setResult({ decision:'no', kind:'Work schedule', title:'Not eligible',
+    reason:'Sections cannot be changed or forced because of a job schedule. Choose from the open sections in UMS that fit your time.' });
+  if (d.reason === 'pref') return setResult({ decision:'no', kind:'Time or instructor preference', title:'Not eligible',
+    reason:'Sections cannot be changed or forced for a preferred time or instructor. You can switch yourself in UMS only to sections that still have seats.' });
+  if (d.pick){ S.picked.has(d.pick) ? S.picked.delete(d.pick) : S.picked.add(d.pick); return render(); }
+  if (d.one){ S.course = d.one; return render(); }
+  if (d.passed){ S.passed.has(d.passed) ? S.passed.delete(d.passed) : S.passed.add(d.passed); store.set({passed:[...S.passed], name:S.name, id:S.id}); return render(); }
+  if (d.full){ const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on);
+    on ? S.full.add(d.full) : S.full.delete(d.full); return; }
+  if (d.act === 'solve'){ S.full.clear(); return go('solved'); }
+  if (d.act === 'recheck') return render();
+  if (d.act === 'accept'){
+    const r = solveSchedule(SECTIONS.sections, [...S.picked], S.full);
+    return setResult({ decision:'no', kind:'Time conflict', title:'Not eligible', courses:[...S.picked], schedule:r.schedule,
+      reason:'Your courses can be taken together without any overlap. Register these sections in UMS.' });
+  }
+  if (d.act === 'toSections') return go('fullSections');
+  if (d.act === 'checkFull'){
+    const open = SECTIONS.sections.filter(s => s.course === S.course && !S.full.has(s.course + '-' + s.section));
+    if (open.length) return setResult({ decision:'no', kind:'Full course', title:'Not eligible', courses:[S.course], schedule:open,
+      reason:`${S.course} still has open seats. Register one of these sections in UMS.` });
+    return go('fullPassed');
+  }
+  if (d.act === 'impact'){
+    const r = delayImpact(DATA, [...S.passed], S.course, REG.term, REG.year, false);
+    if (r.status === 'passed') return setResult({ decision:'no', kind:'Full course', title:'Not needed', courses:[S.course], reason:`You marked ${S.course} as passed.` });
+    if (r.status === 'missing-prereqs') return setResult({ decision:'no', kind:'Full course', title:'Not eligible', courses:[S.course],
+      reason:`You haven't passed the prerequisites for ${S.course}: ${r.missingPre.join(', ')}.` });
+    if (r.graduating || r.delays) return setResult({ decision:'yes', kind:'Full course', title:'Eligible for review', courses:[S.course],
+      reason: r.graduating ? `All sections of ${S.course} are full and you need it to graduate this semester.`
+        : `All sections of ${S.course} are full. Waiting a semester moves your expected graduation from ${termName(r.withIt)} to ${termName(r.without)}.` });
+    return setResult({ decision:'no', kind:'Full course', title:'Not eligible', courses:[S.course],
+      reason:`Taking ${S.course} next semester doesn't change your expected graduation (${termName(r.withIt)}). Register other courses from your plan this semester.` });
+  }
+  if (d.act === 'otherDone'){ S.note = document.getElementById('noteBox').value.trim();
+    return setResult({ decision:'maybe', kind:'Other', title:'See the advisor', note:S.note, reason: S.note || 'No details given.' }); }
+  if (d.act === 'copy'){
+    S.name = document.getElementById('stName').value.trim(); S.id = document.getElementById('stId').value.trim();
+    store.set({passed:[...S.passed], name:S.name, id:S.id});
+    const t = summaryText(), toast = document.getElementById('toast');
+    try { await navigator.clipboard.writeText(t); toast.textContent = 'Summary copied.'; }
+    catch(err){ toast.textContent = 'Copy blocked. Select the text below and copy it.'; const ta = document.createElement('textarea'); ta.value = t; ta.readOnly = true; toast.after(ta); ta.select(); }
+    return;
+  }
+  if (d.act === 'restart'){ S.history = []; S.picked.clear(); S.full.clear(); S.course = null; S.note = ''; return go('start'); }
+});
+
+document.getElementById('regTerm').textContent = termName(REG);
+document.getElementById('sampleNote').hidden = !SECTIONS.sample;
+go('start');
+</script>
+
+</body></html>

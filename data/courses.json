@@ -1,0 +1,786 @@
+{
+  "program": {
+    "code": "CENG",
+    "name": "Bachelor of Science in Computer Engineering",
+    "university": "Lebanese International University",
+    "totalCredits": 108,
+    "posDate": "2024-09-04",
+    "creditLimits": {
+      "fall": 18,
+      "spring": 18,
+      "summer": 8
+    },
+    "notes": [
+      "prereqs: must be completed BEFORE the course (all required).",
+      "coreqs: must be completed before OR taken in the same semester.",
+      "externalPrereqs: remedial courses outside the 108 credits; assumed completed.",
+      "offered: semesters the course opens in.",
+      "pairedWith: must be registered in the same semester (unless the partner is already completed)."
+    ]
+  },
+  "externalCourses": [
+    "MATH160",
+    "MATH161",
+    "PHYS160",
+    "PHYS161",
+    "CHEM160",
+    "ENGL051",
+    "ENGL101",
+    "ENGL151"
+  ],
+  "courses": [
+    {
+      "code": "CULT200",
+      "name": "Introduction to Arab-Islamic Civilization",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "MATH225",
+      "name": "Linear Algebra with Applications",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [
+        "MATH160",
+        "ENGL051",
+        "MATH161"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "ENGL201",
+      "name": "Composition and Research Skills",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [
+        "ENGL151"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "ENGG200",
+      "name": "Introduction to Engineering",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [
+        "MATH160",
+        "CHEM160"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "PHYS220",
+      "name": "Physics for Engineers",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [
+        "MATH210"
+      ],
+      "externalPrereqs": [
+        "PHYS161",
+        "ENGL101",
+        "PHYS160"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "MATH210",
+      "name": "Calculus II",
+      "credits": 3,
+      "year": 1,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [
+        "MATH161",
+        "MATH160"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CSCI250L",
+      "name": "Introduction to Programming Lab",
+      "credits": 1,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [],
+      "coreqs": [
+        "CSCI250"
+      ],
+      "externalPrereqs": [
+        "ENGL101"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "CSCI250"
+    },
+    {
+      "code": "MATH270",
+      "name": "Ordinary Differential Equations",
+      "credits": 3,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [
+        "MATH210"
+      ],
+      "coreqs": [
+        "MATH225"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CSCI250",
+      "name": "Introduction to Programming",
+      "credits": 3,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [],
+      "coreqs": [
+        "CSCI250L"
+      ],
+      "externalPrereqs": [
+        "ENGL101"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "CSCI250L"
+    },
+    {
+      "code": "EENG250",
+      "name": "Electric Circuits I",
+      "credits": 3,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [],
+      "coreqs": [
+        "ENGG200",
+        "MATH210"
+      ],
+      "externalPrereqs": [
+        "PHYS161",
+        "PHYS160",
+        "MATH161",
+        "MATH160",
+        "ENGL051"
+      ],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CENG250",
+      "name": "Digital Logic I",
+      "credits": 3,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "MATH220",
+      "name": "Calculus III",
+      "credits": 3,
+      "year": 1,
+      "term": "spring",
+      "prereqs": [
+        "MATH210"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "ARAB200",
+      "name": "Arabic Language and Literature",
+      "credits": 3,
+      "year": 1,
+      "term": "summer",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "ENGL251",
+      "name": "Communication Skills",
+      "credits": 3,
+      "year": 1,
+      "term": "summer",
+      "prereqs": [
+        "ENGL201"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CSCI300",
+      "name": "Intermediate Programming with Objects",
+      "credits": 3,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [
+        "CSCI250L",
+        "CSCI250"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "CENG325"
+    },
+    {
+      "code": "EENG300",
+      "name": "Electric Circuits II",
+      "credits": 3,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [
+        "EENG250"
+      ],
+      "coreqs": [
+        "EENG301L"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring"
+      ],
+      "pairedWith": "EENG301L"
+    },
+    {
+      "code": "MATH310",
+      "name": "Probability & Statistics for Scientists & Engineers",
+      "credits": 3,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [
+        "MATH210",
+        "ENGL201"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CENG335",
+      "name": "Digital Logic II",
+      "credits": 3,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [
+        "CSCI250",
+        "CENG250"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring"
+      ]
+    },
+    {
+      "code": "CENG325",
+      "name": "Software Applications and Design",
+      "credits": 3,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring"
+      ],
+      "pairedWith": "CSCI300"
+    },
+    {
+      "code": "EENG301L",
+      "name": "Electric Circuits Lab",
+      "credits": 1,
+      "year": 2,
+      "term": "fall",
+      "prereqs": [
+        "EENG250"
+      ],
+      "coreqs": [
+        "EENG300"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring"
+      ],
+      "pairedWith": "EENG300"
+    },
+    {
+      "code": "EENG350L",
+      "name": "Electronic Circuits I Lab",
+      "credits": 1,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "EENG300",
+        "EENG250",
+        "EENG301L"
+      ],
+      "coreqs": [
+        "EENG350"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "EENG350"
+    },
+    {
+      "code": "ENGG300",
+      "name": "Engineering Economics",
+      "credits": 3,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "ENGL201",
+        "MATH225"
+      ],
+      "coreqs": [
+        "MATH220"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CENG352L",
+      "name": "Digital Logic Circuits Lab",
+      "credits": 1,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "CENG250",
+        "EENG301L"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "CENG380"
+    },
+    {
+      "code": "EENG385",
+      "name": "Signals and Systems",
+      "credits": 3,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "MATH225",
+        "EENG300"
+      ],
+      "coreqs": [
+        "MATH310",
+        "MATH270"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CENG375",
+      "name": "Introduction to Database Systems",
+      "credits": 3,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "CENG325",
+        "CSCI300"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "CENG380",
+      "name": "Microprocessors and Microcontrollers",
+      "credits": 3,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "CENG250",
+        "CENG335",
+        "EENG250",
+        "CSCI250"
+      ],
+      "coreqs": [
+        "CENG352L"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "CENG352L"
+    },
+    {
+      "code": "EENG350",
+      "name": "Electronic Circuits I",
+      "credits": 3,
+      "year": 2,
+      "term": "spring",
+      "prereqs": [
+        "ENGG200",
+        "CENG250",
+        "EENG300",
+        "EENG250"
+      ],
+      "coreqs": [
+        "EENG350L"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ],
+      "pairedWith": "EENG350L"
+    },
+    {
+      "code": "CENG430L",
+      "name": "Linux Lab",
+      "credits": 1,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG380",
+        "CENG325"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ]
+    },
+    {
+      "code": "EENG447",
+      "name": "Analog Communication Systems",
+      "credits": 3,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "MATH310",
+        "EENG385"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ]
+    },
+    {
+      "code": "CENG415",
+      "name": "Communication Networks",
+      "credits": 3,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG250",
+        "CENG325",
+        "CSCI250",
+        "CSCI300"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ]
+    },
+    {
+      "code": "CENG420",
+      "name": "Web Programming and Technologies",
+      "credits": 3,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG325",
+        "CSCI300",
+        "CENG375"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ]
+    },
+    {
+      "code": "CENG400L",
+      "name": "Microcontroller Applications Lab",
+      "credits": 1,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG380"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ],
+      "pairedWith": "CENG400"
+    },
+    {
+      "code": "CENG400",
+      "name": "Computer Organization and Design",
+      "credits": 3,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG335",
+        "CENG250",
+        "CENG380"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ],
+      "pairedWith": "CENG400L"
+    },
+    {
+      "code": "CENG435",
+      "name": "Mobile Application Development",
+      "credits": 3,
+      "year": 3,
+      "term": "fall",
+      "prereqs": [
+        "CENG325",
+        "CSCI300",
+        "CENG375"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall"
+      ]
+    },
+    {
+      "code": "CENG450L",
+      "name": "Scripting Languages Lab",
+      "credits": 1,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "CENG430L"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    },
+    {
+      "code": "CENG455L",
+      "name": "Communication Networks Lab",
+      "credits": 1,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "CENG415"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    },
+    {
+      "code": "CENG495",
+      "name": "Senior Project",
+      "credits": 3,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "CENG420",
+        "EENG350",
+        "EENG447",
+        "CENG435",
+        "CENG415",
+        "CENG380",
+        "CENG375"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    },
+    {
+      "code": "EENG467L",
+      "name": "Analog Communication Systems Lab",
+      "credits": 1,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "EENG447"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    },
+    {
+      "code": "ENGG450",
+      "name": "Engineering Ethics and Professional Practice",
+      "credits": 3,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "ENGL251"
+      ],
+      "coreqs": [
+        "CENG495",
+        "ENGG300"
+      ],
+      "externalPrereqs": [],
+      "offered": [
+        "spring",
+        "summer"
+      ]
+    },
+    {
+      "code": "GENELEC",
+      "name": "General Elective",
+      "credits": 3,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "fall",
+        "spring",
+        "summer"
+      ],
+      "isElective": true
+    },
+    {
+      "code": "CENG460",
+      "name": "Operating Systems (Major Elective)",
+      "credits": 3,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "CENG380",
+        "CSCI300"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    },
+    {
+      "code": "CENG470",
+      "name": "Data Structures and Analysis of Algorithms (Major Elective)",
+      "credits": 3,
+      "year": 3,
+      "term": "spring",
+      "prereqs": [
+        "CENG325",
+        "CSCI300"
+      ],
+      "coreqs": [],
+      "externalPrereqs": [],
+      "offered": [
+        "spring"
+      ]
+    }
+  ]
+}
