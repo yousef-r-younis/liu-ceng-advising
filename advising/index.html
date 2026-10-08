@@ -115,7 +115,7 @@ function buildIndex(courses) {
     return seen;
   };
   courses.forEach(c => { unlocks[c.code] = count(c.code, new Set()).size; });
-  return { byCode, height, unlocks };
+  return { byCode, height, unlocks, deps };
 }
 
 // LIU academic year: Fall (Oct) -> Spring (Feb) -> Summer (Jun/Jul), all named by the year they end in.
@@ -186,7 +186,33 @@ function planOnce(data, completed, opts) {
   }
   // trim trailing empty terms
   while (plan.length && !plan[plan.length - 1].courses.length) plan.pop();
-  return { plan, unplaced: remaining().map(c => c.code) };
+  tidyPlan(plan, idx, limits);
+  return { plan: plan.filter(s => s.courses.length || s.term !== 'summer'), unplaced: remaining().map(c => c.code) };
+}
+
+// Move courses that unlock nothing (electives, final courses) later when that frees a summer
+// or matches the official plan. Never changes the graduation term.
+function tidyPlan(plan, idx, limits) {
+  if (plan.length < 2) return;
+  const leaf = c => !idx.deps[c.code].length && !c.pairedWith;
+  const fits = (s, c) => c.offered.includes(s.term) && s.credits + c.credits <= limits[s.term];
+  const move = (c, from, to) => {
+    from.courses = from.courses.filter(x => x !== c); from.credits -= c.credits;
+    to.courses.push(c); to.credits += c.credits;
+  };
+  const last = plan[plan.length - 1];
+  // 1. Electives go to the final semester when there is room, as in the official plan
+  plan.slice(0, -1).forEach(s => s.courses.filter(c => c.isElective).forEach(c => { if (fits(last, c)) move(c, s, last); }));
+  // 2. Empty a summer if every course in it can move to a later Fall/Spring
+  for (let i = plan.length - 2; i >= 0; i--) {
+    const s = plan[i];
+    if (s.term !== 'summer' || !s.courses.length || !s.courses.every(leaf)) continue;
+    const later = plan.slice(i + 1).filter(x => x.term !== 'summer');
+    const trial = later.map(x => ({ term: x.term, credits: x.credits }));
+    const dest = s.courses.map(c => { for (let k = trial.length - 1; k >= 0; k--) if (fits(trial[k], c)) { trial[k].credits += c.credits; return k; } return -1; });
+    if (dest.includes(-1)) continue;
+    s.courses.slice().forEach((c, j) => move(c, s, later[dest[j]]));
+  }
 }
 
 // Try a plan that follows the official order closely, then faster variants; keep the earliest graduation.
