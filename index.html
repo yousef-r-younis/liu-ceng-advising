@@ -3,15 +3,29 @@
 <title>CENG Advising Tools</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
-:root{color-scheme:light;--bg:#f2f3f3;--card:#fff;--ink:#1c2529;--muted:#6b767b;--line:#e4e7e8;--soft:#f6f7f7;--f:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{color-scheme:light;--bg:#f3f5f8;--navy:#103c6e;--card:#fff;--ink:#1c2529;--muted:#6b767b;--line:#e4e7e8;--soft:#f6f7f7;--f:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f)}
-.wrap{max-width:560px;margin:0 auto;padding:28px 16px 48px;display:grid;gap:14px}
+.wrap{max-width:560px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:14px}
 small{font-size:13px;color:var(--muted)}h1{font:700 22px/1.2 var(--f);margin:2px 0 0}
 a.choice{display:grid;gap:2px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);text-decoration:none}
 a.choice:hover{background:var(--soft)}a.choice b{font-weight:600;font-size:16px}a.choice span{font-size:14px;color:var(--muted)}
 a:focus-visible{outline:2px solid #2c5d97;outline-offset:2px}
-</style></head><body><div class="wrap">
-<div><small>LIU · CCE Department</small><h1>CENG Advising Tools</h1></div>
+
+/* LIU brand bar */
+.brand{background:var(--card);border-bottom:1px solid var(--line)}
+.brand-in{max-width:560px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.brand img{width:44px;height:44px;object-fit:contain;flex:none}
+.brand .mark{width:44px;height:44px;border-radius:50%;border:2px solid var(--navy);color:var(--navy);display:grid;place-items:center;font:700 13px var(--f);flex:none}
+.brand b{display:block;font:600 15px/1.25 var(--f);color:var(--navy)}
+.brand span{display:block;font-size:12px;color:var(--muted)}
+h1{color:var(--navy)}
+</style></head><body><header class="brand"><div class="brand-in">
+  <img src="/assets/liu.png" alt="LIU logo" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+  <div class="mark" hidden>LIU</div>
+  <div><b>Lebanese International University</b><span>CCE Department · School of Engineering</span></div>
+</div></header>
+<div class="wrap">
+<div><small>Computer Engineering (CENG)</small><h1>Advising Tools</h1></div>
 <a class="choice" href="advising/"><b>Registration request</b><span>Check if a forced registration or section change is possible</span></a>
 <a class="choice" href="planner/"><b>Study planner</b><span>Tick the courses you passed and get a plan to graduation</span></a>
 </div></body></html>
