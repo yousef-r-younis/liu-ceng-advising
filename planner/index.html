@@ -38,7 +38,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .group{display:grid;gap:8px}
 .ghead{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
 .ghead b{font-weight:600;color:var(--muted)}
-.ghead span{color:var(--muted);font-variant-numeric:tabular-nums}
+.ghead span{color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+.ghead{gap:10px}
+.ghead button{font:500 13px var(--f);color:var(--blue);background:none;border:0;padding:2px 0;cursor:pointer}
+.reg select{font:600 14px var(--f);color:var(--ink);padding:4px 6px;margin-top:2px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
 .pills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .pill{font:500 13px var(--m);padding:10px 4px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);cursor:pointer;text-align:center;display:grid;gap:2px;min-width:0}
 .pill .nm{display:none;font:400 13px var(--f);color:var(--muted)}
@@ -86,7 +89,7 @@ select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line)
 <div class="wrap">
   <div class="top">
     <div><small>LIU · CCE Department</small><h1>CENG Study Planner</h1></div>
-    <div class="reg">Registering for<b id="regTerm"></b></div>
+    <div class="reg"><label for="regSel">Registering for</label><br><select id="regSel"></select></div>
   </div>
 
   <div class="tabs" role="tablist">
@@ -110,7 +113,6 @@ select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line)
   <section class="card" id="step2" role="tabpanel" aria-labelledby="tab2" hidden>
     <div id="gradBox"></div>
     <div class="opts">
-      <div class="field"><label for="startSel">Start from</label><select id="startSel"></select></div>
       <label class="switch" for="useSummer"><input id="useSummer" type="checkbox">Include summers</label>
     </div>
     <div id="result" style="display:grid;gap:20px"></div>
@@ -289,8 +291,8 @@ const store = {
   set(v){ try { localStorage.setItem('ceng-planner', JSON.stringify(v)); } catch(e){} }
 };
 const saved = store.get() || {};
-const NOW = currentTerm(new Date());
-const REG = nextTerm(NOW);
+const DEFAULT_REG = { term: 'spring', year: 2027 }; // Spring 2026–2027
+const REG = DEFAULT_REG;
 const termName = t => `${LABEL[t.term]} ${t.year - 1}–${t.year}`;
 const state = { done: new Set(saved.done || []), startTerm: REG.term, startYear: REG.year, useSummer: saved.useSummer || false, names: saved.names || false, step: 1 };
 const save = () => store.set({done:[...state.done], useSummer:state.useSummer, names:state.names});
@@ -312,7 +314,7 @@ function offeredTag(c){
 function renderChecklist(){
   document.getElementById('checklist').innerHTML = groups.map((g, gi) => `
     <div class="group">
-      <div class="ghead"><b>Year ${g.year} · ${LABEL[g.term]}</b><span id="gc-${gi}"></span></div>
+      <div class="ghead"><b>Year ${g.year} · ${LABEL[g.term]}</b><span id="gc-${gi}"></span><button type="button" data-all="${gi}">Tick all</button></div>
       <div class="pills">${g.list.map(c => `<button type="button" class="pill" data-code="${c.code}" aria-pressed="false" title="${c.name}">
         <span>${c.code}</span><span class="nm">${c.name}</span><span class="cr">${c.credits} cr</span></button>`).join('')}</div>
     </div>`).join('');
@@ -324,6 +326,7 @@ function sync(){
     const tot = g.list.reduce((s, c) => s + c.credits, 0);
     const got = g.list.filter(c => state.done.has(c.code)).reduce((s, c) => s + c.credits, 0);
     document.getElementById('gc-' + gi).textContent = `${got}/${tot} cr`;
+    document.querySelector(`[data-all="${gi}"]`).textContent = got === tot ? 'Untick all' : 'Tick all';
   });
   const credits = DATA.courses.filter(c => state.done.has(c.code)).reduce((s, c) => s + c.credits, 0);
   document.getElementById('bar').style.width = (credits / DATA.program.totalCredits * 100) + '%';
@@ -367,11 +370,17 @@ document.getElementById('checklist').addEventListener('click', e => {
   const code = p.dataset.code;
   state.done.has(code) ? state.done.delete(code) : state.done.add(code); sync();
 });
-document.getElementById('regTerm').textContent = termName(REG);
-const sel = document.getElementById('startSel'), su = document.getElementById('useSummer'), sn = document.getElementById('showNames');
-let opt = REG, opts = '';
-for (let i = 0; i < 6; i++){ opts += `<option value="${opt.term}-${opt.year}">${termName(opt)}</option>`; opt = nextTerm(opt); }
+document.getElementById('checklist').addEventListener('click', e => {
+  const b = e.target.closest('[data-all]'); if (!b) return;
+  const list = groups[+b.dataset.all].list;
+  const allOn = list.every(c => state.done.has(c.code));
+  list.forEach(c => allOn ? state.done.delete(c.code) : state.done.add(c.code)); sync();
+});
+const sel = document.getElementById('regSel'), su = document.getElementById('useSummer'), sn = document.getElementById('showNames');
+let opt = { term: 'fall', year: 2027 }, opts = '';
+for (let i = 0; i < 9; i++){ opts += `<option value="${opt.term}-${opt.year}">${termName(opt)}</option>`; opt = nextTerm(opt); }
 sel.innerHTML = opts;
+sel.value = `${REG.term}-${REG.year}`;
 su.checked = state.useSummer; sn.checked = state.names;
 sel.addEventListener('change', () => { const [tm, yr] = sel.value.split('-'); state.startTerm = tm; state.startYear = +yr; sync(); });
 su.addEventListener('change', () => { state.useSummer = su.checked; sync(); });

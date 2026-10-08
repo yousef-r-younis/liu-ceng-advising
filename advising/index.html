@@ -36,7 +36,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .pill{font:500 13px var(--m);padding:10px 4px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);cursor:pointer;text-align:center;min-width:0}
 .pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .pill.green[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
-.ghead{font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
+.ghead{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
+.ghead button{font:500 13px var(--f);color:var(--blue);background:none;border:0;padding:2px 0;cursor:pointer}
 .primary{font:600 15px var(--f);padding:13px;border:0;border-radius:12px;background:var(--ink);color:#fff;cursor:pointer}
 .primary:disabled{opacity:.35;cursor:default}
 .secondary{font:500 14px var(--f);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
@@ -368,7 +369,7 @@ const screens = {
     const groups = [];
     DATA.courses.forEach(c => { let g = groups.find(x => x.year === c.year && x.term === c.term); if (!g) groups.push(g = {year:c.year, term:c.term, list:[]}); g.list.push(c); });
     return head('Full course · step 3 of 3', 'Which courses have you passed?', 'This shows whether waiting a semester for ' + S.course + ' delays your graduation.') +
-      groups.map(g => `<div class="ghead">Year ${g.year} · ${LABEL[g.term]}</div><div class="pills">${g.list.map(c => `<button type="button" class="pill green" data-passed="${c.code}" aria-pressed="${S.passed.has(c.code)}" title="${esc(c.name)}">${c.code}</button>`).join('')}</div>`).join('') + `
+      groups.map((g, gi) => `<div class="ghead"><span>Year ${g.year} · ${LABEL[g.term]}</span><button type="button" data-group="${g.list.map(c => c.code).join(',')}">${g.list.every(c => S.passed.has(c.code)) ? 'Untick all' : 'Tick all'}</button></div><div class="pills">${g.list.map(c => `<button type="button" class="pill green" data-passed="${c.code}" aria-pressed="${S.passed.has(c.code)}" title="${esc(c.name)}">${c.code}</button>`).join('')}</div>`).join('') + `
       <button class="primary" type="button" data-act="impact">See result</button>`;
   },
   other(){
@@ -420,6 +421,8 @@ el.addEventListener('click', async e => {
   if (d.pick){ S.picked.has(d.pick) ? S.picked.delete(d.pick) : S.picked.add(d.pick); return render(); }
   if (d.one){ S.course = d.one; return render(); }
   if (d.passed){ S.passed.has(d.passed) ? S.passed.delete(d.passed) : S.passed.add(d.passed); store.set({passed:[...S.passed], name:S.name, id:S.id}); return render(); }
+  if (d.group){ const codes = d.group.split(','); const allOn = codes.every(c => S.passed.has(c));
+    codes.forEach(c => allOn ? S.passed.delete(c) : S.passed.add(c)); store.set({passed:[...S.passed], name:S.name, id:S.id}); return render(); }
   if (d.full){ const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on);
     on ? S.full.add(d.full) : S.full.delete(d.full); return; }
   if (d.act === 'solve'){ S.full.clear(); return go('solved'); }
