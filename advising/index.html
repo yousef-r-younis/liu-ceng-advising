@@ -278,21 +278,21 @@ function solveSchedule(sections, courses, full) {
   return { ok: false, clash: courses };
 }
 
-// Does delaying `code` past the registration term push graduation back?
-function delayImpact(data, passed, code, startTerm, startYear, useSummer) {
+// Does waiting past the registration term for `code` push graduation into a later academic year?
+// Summer counts: finishing in the summer of the same academic year is not a delay.
+function delayImpact(data, passed, code, startTerm, startYear) {
   const c = data.courses.find(x => x.code === code);
   const done = new Set(passed);
   if (done.has(code)) return { status: 'passed' };
   if (!c.offered.includes(startTerm)) return { status: 'not-offered' };
   const missingPre = c.prereqs.filter(p => !done.has(p));
   if (missingPre.length) return { status: 'missing-prereqs', missingPre };
-  const base = { startTerm, startYear, useSummer };
+  const base = { startTerm, startYear, useSummer: true };
   const a = planCourses(data, passed, base);
   const b = planCourses(data, passed, Object.assign({}, base, { blockFirst: [code] }));
-  const key = r => { const l = r.plan[r.plan.length - 1]; return l ? l.year * 3 + ['fall', 'spring', 'summer'].indexOf(l.term) : 0; };
-  const remaining = data.courses.filter(x => !done.has(x.code)).length;
-  const graduating = a.plan.length === 1 || remaining === (a.plan[0] ? a.plan[0].courses.length : 0);
-  return { status: 'ok', graduating, delays: key(b) > key(a), withIt: a.plan[a.plan.length - 1], without: b.plan[b.plan.length - 1] };
+  const gradA = a.plan[a.plan.length - 1], gradB = b.plan[b.plan.length - 1];
+  const later = b.plan.find(s => s.courses.some(x => x.code === code));
+  return { status: 'ok', delays: gradB.year > gradA.year, withIt: gradA, without: gradB, takeIn: later };
 }
 
 
@@ -440,15 +440,15 @@ el.addEventListener('click', async e => {
     return go('fullPassed');
   }
   if (d.act === 'impact'){
-    const r = delayImpact(DATA, [...S.passed], S.course, REG.term, REG.year, false);
+    const r = delayImpact(DATA, [...S.passed], S.course, REG.term, REG.year);
     if (r.status === 'passed') return setResult({ decision:'no', kind:'Full course', title:'Not needed', courses:[S.course], reason:`You marked ${S.course} as passed.` });
     if (r.status === 'missing-prereqs') return setResult({ decision:'no', kind:'Full course', title:'Not eligible', courses:[S.course],
       reason:`You haven't passed the prerequisites for ${S.course}: ${r.missingPre.join(', ')}.` });
-    if (r.graduating || r.delays) return setResult({ decision:'yes', kind:'Full course', title:'Eligible for review', courses:[S.course],
-      reason: r.graduating ? `All sections of ${S.course} are full and you need it to graduate this semester.`
-        : `All sections of ${S.course} are full. Waiting a semester moves your expected graduation from ${termName(r.withIt)} to ${termName(r.without)}.` });
+    if (r.delays) return setResult({ decision:'yes', kind:'Full course', title:'Eligible for review', courses:[S.course],
+      reason:`All sections of ${S.course} are full, and waiting pushes your graduation from ${termName(r.withIt)} to ${termName(r.without)}.` });
+    const when = r.takeIn ? termName(r.takeIn) : 'a later semester';
     return setResult({ decision:'no', kind:'Full course', title:'Not eligible', courses:[S.course],
-      reason:`Taking ${S.course} next semester doesn't change your expected graduation (${termName(r.withIt)}). Register other courses from your plan this semester.` });
+      reason:`Register ${S.course} in ${when} instead. You can still graduate in ${termName(r.without)}, the same academic year.` });
   }
   if (d.act === 'otherDone'){ S.note = document.getElementById('noteBox').value.trim();
     return setResult({ decision:'maybe', kind:'Other', title:'See the advisor', note:S.note, reason: S.note || 'No details given.' }); }
